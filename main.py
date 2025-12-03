@@ -58,55 +58,51 @@ def create_jigsaw_pieces(piece_images: List[pygame.Surface],
 def main():
     """Main game function - Modern drag-and-drop mechanism"""
     
-    # 1. Initialize Pygame
+    # 1. Show main menu (use Tkinter before initializing Pygame to avoid macOS SDL/Tk conflicts)
+    print("Opening main menu...")
+    if not Menu.show_main_menu():
+        print("Exiting game...")
+        sys.exit(0)
+    
+    # 2. Game mode selection
+    print("Waiting for game mode selection...")
+    game_mode = Menu.select_game_mode()
+    
+    if game_mode is None:
+        print("No game mode selected. Exiting game.")
+        sys.exit(0)
+    
+    print(f"Selected game mode: {game_mode}")
+    
+    # 3. Get image selection from user
+    print("Waiting for image selection...")
+    image_path = Menu.select_image()
+    
+    if image_path is None:
+        print("No image selected. Exiting game.")
+        sys.exit(0)
+    
+    print(f"Selected image: {image_path}")
+    
+    # 4. Get grid size selection from user
+    print("Waiting for grid size selection...")
+    grid_size = Menu.select_grid_size()
+    
+    if grid_size is None:
+        print("No grid size selected. Exiting game.")
+        sys.exit(0)
+    
+    rows, cols = grid_size
+    print(f"Selected grid size: {rows}x{cols}")
+    
+    # 5. Initialize Pygame (after closing Tkinter windows)
     try:
         pygame.init()
         pygame.font.init()
     except pygame.error as e:
         print(f"Pygame initialization error: {e}")
         sys.exit(1)
-    
-    # 2. Show main menu
-    print("Opening main menu...")
-    if not Menu.show_main_menu():
-        print("Exiting game...")
-        pygame.quit()
-        sys.exit(0)
-    
-    # 3. Game mode selection
-    print("Waiting for game mode selection...")
-    game_mode = Menu.select_game_mode()
-    
-    if game_mode is None:
-        print("No game mode selected. Exiting game.")
-        pygame.quit()
-        sys.exit(0)
-    
-    print(f"Selected game mode: {game_mode}")
-    
-    # 4. Get image selection from user
-    print("Waiting for image selection...")
-    image_path = Menu.select_image()
-    
-    if image_path is None:
-        print("No image selected. Exiting game.")
-        pygame.quit()
-        sys.exit(0)
-    
-    print(f"Selected image: {image_path}")
-    
-    # 5. Get grid size selection from user
-    print("Waiting for grid size selection...")
-    grid_size = Menu.select_grid_size()
-    
-    if grid_size is None:
-        print("No grid size selected. Exiting game.")
-        pygame.quit()
-        sys.exit(0)
-    
-    rows, cols = grid_size
-    print(f"Selected grid size: {rows}x{cols}")
-    
+
     # 6. Create screen
     temp_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     screen_width, screen_height = SCREEN_WIDTH, SCREEN_HEIGHT
@@ -135,15 +131,15 @@ def main():
         pygame_pieces = [processor.pil_to_pygame(piece) for piece in pil_pieces]
         
     except FileNotFoundError as e:
-        Menu.show_error("File Error", str(e))
+        print(f"File Error: {e}")
         pygame.quit()
         sys.exit(1)
     except UnidentifiedImageError as e:
-        Menu.show_error("Image Error", str(e))
+        print(f"Image Error: {e}")
         pygame.quit()
         sys.exit(1)
     except Exception as e:
-        Menu.show_error("Unexpected Error", f"Error occurred while processing image: {e}")
+        print(f"Unexpected Error while processing image: {e}")
         pygame.quit()
         sys.exit(1)
     
