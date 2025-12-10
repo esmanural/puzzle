@@ -1,27 +1,27 @@
 """
-Sabitler ve konfigürasyon ayarları
+Constants and configuration settings
 """
 
-# Ekran ayarları
+# Screen settings
 SCREEN_WIDTH = 1400
 SCREEN_HEIGHT = 900
 FPS = 60
 
-# Layout oranları
-PLAY_AREA_WIDTH_RATIO = 0.65  # Ekranın %65'i PlayArea
-PIECE_POOL_WIDTH_RATIO = 0.30  # Ekranın %30'u PiecePool
-MARGIN = 20  # Kenar boşlukları
+# Layout ratios
+PLAY_AREA_WIDTH_RATIO = 0.65  
+PIECE_POOL_WIDTH_RATIO = 0.30  
+MARGIN = 20  
 
-# Renkler (Modern tema)
-BACKGROUND_COLOR = (45, 52, 54)  # Koyu gri
-PLAY_AREA_BG = (99, 110, 114)    # Orta gri
-PIECE_POOL_BG = (178, 190, 195)  # Açık gri
+# Colors (Modern theme)
+BACKGROUND_COLOR = (45, 52, 54)  
+PLAY_AREA_BG = (99, 110, 114)    
+PIECE_POOL_BG = (178, 190, 195)  
 GRID_LINE_COLOR = (200, 200, 200)
-SHADOW_COLOR = (0, 0, 0, 100)    # Yarı saydam siyah
+SHADOW_COLOR = (0, 0, 0, 100)    
 TEXT_COLOR = (255, 255, 255)
-ACCENT_COLOR = (52, 152, 219)    # Mavi vurgu
+ACCENT_COLOR = (52, 152, 219)    
 
-# Grid boyutu seçenekleri (rows, cols)
+# Grid size options (rows, cols)
 GRID_OPTIONS = [
     (2, 3),
     (3, 3),
@@ -31,22 +31,22 @@ GRID_OPTIONS = [
     (5, 5)
 ]
 
-# Görsel ayarlar
+# Visual settings
 GRID_LINE_WIDTH = 2
 SHADOW_OFFSET = 5
 HOVER_SCALE = 1.05
-SNAP_THRESHOLD = 40  # Snap için mesafe eşiği (piksel)
+SNAP_THRESHOLD = 40  
 
-# Animasyon
-SNAP_ANIMATION_DURATION = 200  # ms
+# Animation
+SNAP_ANIMATION_DURATION = 200  
 
-# Desteklenen resim formatları
+# Supported image formats
 SUPPORTED_FORMATS = ['.png', '.jpg', '.jpeg', '.bmp']
 
-# Stok görseller klasörü
+# Stock images folder
 STOCK_IMAGES_DIR = "assets/stock_images"
 
 # Game modes
-GAME_MODE_CREATIVE = "creative"  # Free mode (no time limit)
-GAME_MODE_TIMED = "timed"  # Time attack mode
-GAME_MODE_CHALLENGE = "challenge"  # Challenge mode (limited moves)
+GAME_MODE_CREATIVE = "creative"  
+GAME_MODE_TIMED = "timed"  
+GAME_MODE_CHALLENGE = "challenge"  

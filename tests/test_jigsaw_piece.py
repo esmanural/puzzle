@@ -6,20 +6,20 @@ from jigsaw_puzzle.models.jigsaw_piece import JigsawPiece
 
 
 class TestJigsawPiece(unittest.TestCase):
-    """JigsawPiece sınıfı için unit testler"""
+    """Unit tests for JigsawPiece class"""
     
     @classmethod
     def setUpClass(cls):
-        """Pygame'i başlat"""
+        """Initialize pygame"""
         pygame.init()
     
     @classmethod
     def tearDownClass(cls):
-        """Pygame'i kapat"""
+        """Quit pygame"""
         pygame.quit()
     
     def setUp(self):
-        """Her test için yeni bir JigsawPiece oluştur"""
+        """Create a new JigsawPiece for each test"""
         # Basit bir pygame Surface oluştur
         self.test_surface = pygame.Surface((100, 100))
         self.test_surface.fill((255, 0, 0))
@@ -31,7 +31,7 @@ class TestJigsawPiece(unittest.TestCase):
         )
     
     def test_initialization(self):
-        """JigsawPiece'in doğru şekilde başlatıldığını test et"""
+        """Test JigsawPiece initialization"""
         self.assertEqual(self.piece.original_position, (0, 0))
         self.assertEqual(self.piece.piece_id, 1)
         self.assertIsNone(self.piece.pixel_position)
@@ -41,34 +41,34 @@ class TestJigsawPiece(unittest.TestCase):
         self.assertIsNotNone(self.piece.image)
     
     def test_is_in_correct_position_true(self):
-        """Parça yerleştirildiğinde True döndürmeli"""
+        """Returns True when piece is placed"""
         self.piece.is_placed = True
         self.assertTrue(self.piece.is_in_correct_position())
     
     def test_is_in_correct_position_false(self):
-        """Parça yerleştirilmediğinde False döndürmeli"""
+        """Returns False when piece is not placed"""
         self.piece.is_placed = False
         self.assertFalse(self.piece.is_in_correct_position())
     
     def test_distance_to_correct_position_no_pixel_position(self):
-        """pixel_position None ise sonsuz mesafe döndürmeli"""
+        """Returns infinity when pixel_position is None"""
         distance = self.piece.distance_to_correct_position((100, 100))
         self.assertEqual(distance, float('inf'))
     
     def test_distance_to_correct_position_with_position(self):
-        """pixel_position varsa doğru mesafeyi hesaplamalı"""
+        """Calculates correct distance when pixel_position exists"""
         self.piece.pixel_position = (0, 0)
         distance = self.piece.distance_to_correct_position((3, 4))
-        self.assertEqual(distance, 5.0)  # 3-4-5 üçgeni
+        self.assertEqual(distance, 5.0)  # 3-4-5 triangle
     
     def test_dragging_state(self):
-        """Sürükleme durumunun değiştirilebildiğini test et"""
+        """Dragging state can be toggled"""
         self.assertFalse(self.piece.is_dragging)
         self.piece.is_dragging = True
         self.assertTrue(self.piece.is_dragging)
     
     def test_z_index_update(self):
-        """Z-index'in güncellenebilir olduğunu test et"""
+        """Z-index can be updated"""
         self.assertEqual(self.piece.z_index, 0)
         self.piece.z_index = 5
         self.assertEqual(self.piece.z_index, 5)

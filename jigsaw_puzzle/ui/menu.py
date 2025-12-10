@@ -206,7 +206,7 @@ class Menu:
             )
             info_label.pack(side=tk.BOTTOM, pady=(15, 0))
             
-            # Klavye kısayolları
+            # Keyboard shortcuts
             def on_key(event):
                 if event.keysym == 'Return':
                     on_start()
@@ -215,30 +215,30 @@ class Menu:
             
             root.bind('<Key>', on_key)
             
-            # Pencereyi göster
+            # Show window
             root.mainloop()
             
             return result[0]
             
         except Exception as e:
-            print(f"Ana menü hatası: {e}")
-            return True  # Hata durumunda oyuna devam et
+            print(f"Main menu error: {e}")
+            return True  # Continue game on error
     
     @staticmethod
     def select_image() -> Optional[str]:
         """
-        Geliştirilmiş resim seçim menüsü (stok görseller + özel resim)
+        Enhanced image selection menu (stock images + custom image)
         
         Returns:
-            Seçilen resim dosyasının yolu (str) veya iptal edilirse None
+            Selected image file path (str) or None if canceled
         """
         try:
             root = tk.Tk()
-            root.title("Resim Seçimi")
+            root.title("Image Selection")
             root.geometry("700x600")
             root.resizable(False, False)
             
-            # Modern renkler
+            # Modern colors
             bg_color = "#2c3e50"
             fg_color = "#ffffff"
             accent_color = "#3498db"
@@ -247,7 +247,7 @@ class Menu:
             
             root.configure(bg=bg_color)
             
-            # Pencereyi ekranın ortasına getir
+            # Center the window on the screen
             root.update_idletasks()
             x = (root.winfo_screenwidth() // 2) - (700 // 2)
             y = (root.winfo_screenheight() // 2) - (600 // 2)
@@ -288,7 +288,7 @@ class Menu:
             )
             stock_frame.pack(padx=30, pady=10, fill=tk.BOTH, expand=True)
             
-            # Stok görselleri listele
+            # List stock images
             stock_images = Menu._get_stock_images()
             
             if stock_images:
@@ -331,7 +331,7 @@ class Menu:
                     )
                     btn.pack(pady=3, padx=10, fill=tk.X)
                     
-                    # Hover efekti
+                    # Hover effect
                     btn.bind("<Enter>", lambda e, b=btn: b.config(bg=button_hover))
                     btn.bind("<Leave>", lambda e, b=btn: b.config(bg=button_bg))
                 
@@ -389,7 +389,7 @@ class Menu:
             )
             custom_btn.pack(pady=5)
             
-            # Hover efekti
+            # Hover effect
             custom_btn.bind("<Enter>", lambda e: custom_btn.config(bg="#2ecc71"))
             custom_btn.bind("<Leave>", lambda e: custom_btn.config(bg="#27ae60"))
             
@@ -410,7 +410,7 @@ class Menu:
             )
             cancel_btn.pack(pady=5)
             
-            # Hover efekti
+            # Hover effect
             cancel_btn.bind("<Enter>", lambda e: cancel_btn.config(bg="#7f8c8d"))
             cancel_btn.bind("<Leave>", lambda e: cancel_btn.config(bg="#95a5a6"))
             
@@ -419,16 +419,16 @@ class Menu:
             return selected_image[0]
             
         except Exception as e:
-            print(f"Resim seçici hatası: {e}")
+            print(f"Image selector error: {e}")
             return None
     
     @staticmethod
     def _get_stock_images() -> list:
         """
-        Stok görseller klasöründeki resimleri listeler
+        List images in the stock images folder
         
         Returns:
-            Stok görsellerin yollarının listesi
+            List of paths to stock images
         """
         stock_images = []
         
@@ -445,18 +445,18 @@ class Menu:
     @staticmethod
     def select_game_mode() -> Optional[str]:
         """
-        Oyun modu seçim menüsü
+        Game mode selection menu
         
         Returns:
-            Seçilen oyun modu (creative/timed/challenge) veya None
+            Selected game mode (creative/timed/challenge) or None
         """
         try:
             root = tk.Tk()
-            root.title("Oyun Modu Seçimi")
+            root.title("Game Mode Selection")
             root.geometry("500x550")
             root.resizable(False, False)
             
-            # Modern renkler
+            # Modern colors
             bg_color = "#2c3e50"
             fg_color = "#ffffff"
             button_bg = "#34495e"
@@ -464,7 +464,7 @@ class Menu:
             
             root.configure(bg=bg_color)
             
-            # Pencereyi ekranın ortasına getir
+            # Center the window on the screen
             root.update_idletasks()
             x = (root.winfo_screenwidth() // 2) - (500 // 2)
             y = (root.winfo_screenheight() // 2) - (550 // 2)
@@ -493,12 +493,12 @@ class Menu:
             )
             desc_label.pack(pady=(0, 20))
             
-            # Mod butonları frame
+            # Mode buttons frame
             modes_frame = tk.Frame(root, bg=bg_color)
             modes_frame.pack(pady=10, padx=40, fill=tk.BOTH, expand=True)
             
             def create_mode_button(mode, title, desc, emoji, color):
-                """Mod butonu oluşturur"""
+                """Create a mode button"""
                 frame = tk.Frame(modes_frame, bg=bg_color)
                 frame.pack(pady=8, fill=tk.X)
                 
@@ -526,7 +526,7 @@ class Menu:
                 )
                 btn.pack(fill=tk.X)
                 
-                # Hover efekti
+                # Hover effect
                 original_color = color
                 btn.bind("<Enter>", lambda e: btn.config(bg=button_hover))
                 btn.bind("<Leave>", lambda e: btn.config(bg=original_color))
@@ -560,10 +560,10 @@ class Menu:
                 "#e74c3c"
             )
             
-            # İptal butonu
+            # Cancel button
             cancel_btn = tk.Button(
                 root,
-                text="✖ İptal",
+                text="✖ Cancel",
                 font=("Segoe UI", 10),
                 bg="#95a5a6",
                 fg=fg_color,
@@ -577,7 +577,7 @@ class Menu:
             )
             cancel_btn.pack(pady=15)
             
-            # Hover efekti
+            # Hover effect
             cancel_btn.bind("<Enter>", lambda e: cancel_btn.config(bg="#7f8c8d"))
             cancel_btn.bind("<Leave>", lambda e: cancel_btn.config(bg="#95a5a6"))
             
@@ -586,40 +586,40 @@ class Menu:
             return selected_mode[0]
             
         except Exception as e:
-            print(f"Oyun modu seçici hatası: {e}")
-            return GAME_MODE_CREATIVE  # Varsayılan olarak serbest mod
+            print(f"Game mode selector error: {e}")
+            return GAME_MODE_CREATIVE  # Default to creative mode
     
     @staticmethod
     def select_grid_size() -> Optional[Tuple[int, int]]:
         """
-        Kullanıcıdan grid boyutu seçmesini ister (modern tkinter UI ile)
+        Ask user to select grid size (modern tkinter UI)
         
         Returns:
-            Seçilen grid boyutu (rows, cols) veya iptal edilirse None
+            Selected grid size (rows, cols) or None if canceled
         """
         try:
             # Tkinter penceresi oluştur
             root = tk.Tk()
-            root.title("Jigsaw Puzzle - Grid Boyutu")
+            root.title("Jigsaw Puzzle - Grid Size")
             root.geometry("380x520")
             root.resizable(False, False)
             
-            # Modern renkler
-            bg_color = "#2d3436"  # Koyu gri
-            fg_color = "#ffffff"  # Beyaz
-            accent_color = "#3498db"  # Mavi
-            button_bg = "#34495e"  # Orta gri
-            button_hover = "#4a5f7f"  # Açık gri
+            # Modern colors
+            bg_color = "#2d3436"  # Dark gray
+            fg_color = "#ffffff"  # White
+            accent_color = "#3498db"  # Blue
+            button_bg = "#34495e"  # Medium gray
+            button_hover = "#4a5f7f"  # Light gray
             
             root.configure(bg=bg_color)
             
-            # Pencereyi ekranın ortasına getir
+            # Center the window on the screen
             root.update_idletasks()
             x = (root.winfo_screenwidth() // 2) - (380 // 2)
             y = (root.winfo_screenheight() // 2) - (520 // 2)
             root.geometry(f"+{x}+{y}")
             
-            # Seçilen grid boyutunu saklamak için değişken
+            # Variable to store selected grid size
             selected_grid = [None]
             
             # Title label
@@ -644,25 +644,25 @@ class Menu:
             )
             info_label.pack()
             
-            # Grid seçenekleri için butonlar
+            # Buttons for grid options
             button_frame = tk.Frame(root, bg=bg_color)
             button_frame.pack(pady=15, padx=25, fill=tk.BOTH, expand=True)
             
             def on_grid_select(grid_size: Tuple[int, int]):
-                """Grid boyutu seçildiğinde çağrılır"""
+                """Called when a grid size is selected"""
                 selected_grid[0] = grid_size
                 root.quit()
                 root.destroy()
             
             def on_enter(e, btn):
-                """Mouse hover efekti"""
+                """Mouse hover effect"""
                 btn['background'] = button_hover
             
             def on_leave(e, btn):
-                """Mouse leave efekti"""
+                """Mouse leave effect"""
                 btn['background'] = button_bg
             
-            # Her grid seçeneği için buton oluştur
+            # Create a button for each grid option
             for i, grid_size in enumerate(GRID_OPTIONS):
                 rows, cols = grid_size
                 total_pieces = rows * cols
@@ -697,14 +697,14 @@ class Menu:
                 )
                 btn.pack(pady=4)
                 
-                # Hover efektleri ekle
+                # Add hover effects
                 btn.bind("<Enter>", lambda e, b=btn: on_enter(e, b))
                 btn.bind("<Leave>", lambda e, b=btn: on_leave(e, b))
             
-            # İptal butonu
+            # Cancel button
             cancel_btn = tk.Button(
                 root,
-                text="✖ İptal",
+                text="✖ Cancel",
                 font=("Segoe UI", 10),
                 bg="#95a5a6",
                 fg=fg_color,
@@ -718,27 +718,27 @@ class Menu:
             )
             cancel_btn.pack(pady=15)
             
-            # Hover efekti iptal butonu için
+            # Hover effect for cancel button
             cancel_btn.bind("<Enter>", lambda e: cancel_btn.config(bg="#7f8c8d"))
             cancel_btn.bind("<Leave>", lambda e: cancel_btn.config(bg="#95a5a6"))
             
-            # Pencereyi göster ve kullanıcı seçimini bekle
+            # Show window and wait for user selection
             root.mainloop()
             
             return selected_grid[0]
             
         except Exception as e:
-            print(f"Grid boyutu seçici hatası: {e}")
+            print(f"Grid size selector error: {e}")
             return None
     
     @staticmethod
     def show_error(title: str, message: str):
         """
-        Hata mesajı gösterir
+        Show an error message
         
         Args:
-            title: Hata başlığı
-            message: Hata mesajı
+            title: Error title
+            message: Error content
         """
         try:
             root = tk.Tk()
@@ -746,17 +746,17 @@ class Menu:
             messagebox.showerror(title, message)
             root.destroy()
         except Exception as e:
-            print(f"Hata mesajı gösterilemedi: {e}")
+            print(f"Error message could not be displayed: {e}")
             print(f"{title}: {message}")
     
     @staticmethod
     def show_info(title: str, message: str):
         """
-        Bilgi mesajı gösterir
+        Show an informational message
         
         Args:
-            title: Mesaj başlığı
-            message: Mesaj içeriği
+            title: Message title
+            message: Message content
         """
         try:
             root = tk.Tk()
@@ -764,5 +764,5 @@ class Menu:
             messagebox.showinfo(title, message)
             root.destroy()
         except Exception as e:
-            print(f"Bilgi mesajı gösterilemedi: {e}")
+            print(f"Info message could not be displayed: {e}")
             print(f"{title}: {message}")

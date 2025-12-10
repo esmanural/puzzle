@@ -5,34 +5,34 @@ from jigsaw_puzzle.models.jigsaw_piece import JigsawPiece
 
 
 class GameState:
-    """Oyun durumunu yönetir"""
+    """Manages current game state"""
     
     def __init__(self, grid_size: Tuple[int, int], pieces: List[JigsawPiece]):
         """
         GameState constructor
         
         Args:
-            grid_size: Grid boyutu (rows, cols)
-            pieces: Tüm yapboz parçalarının listesi
+            grid_size: Grid size (rows, cols)
+            pieces: List of all jigsaw pieces
         """
         self.grid_size = grid_size
         self.pieces = pieces
         self.selected_piece: Optional[JigsawPiece] = None
         self.is_completed = False
-        self.is_failed = False  # Oyun başarısız oldu mu (süre/hamle sınırı)
+        self.is_failed = False  
         self.move_count = 0
-        self.elapsed_time = 0.0  # Geçen süre (saniye)
-        self.game_mode = "creative"  # Oyun modu (creative/timed/challenge)
+        self.elapsed_time = 0.0  
+        self.game_mode = "creative"  
     
     def get_piece_at(self, position: Tuple[int, int]) -> Optional[JigsawPiece]:
         """
-        Belirtilen grid konumundaki parçayı döndürür
+        Return the piece located at the specified grid position
         
         Args:
-            position: Aranacak konum (row, col)
+            position: Position to search (row, col)
             
         Returns:
-            Optional[JigsawPiece]: Konumdaki parça veya None
+            Optional[JigsawPiece]: Piece at position or None
         """
         for piece in self.pieces:
             if piece.original_position == position and piece.is_placed:
@@ -41,12 +41,12 @@ class GameState:
     
     def check_completion(self) -> bool:
         """
-        Yapboz'un tamamlanıp tamamlanmadığını kontrol eder
+        Check whether the puzzle is completed
         
         Returns:
-            bool: Tüm parçalar doğru konumdaysa True, değilse False
+            bool: True if all pieces are in correct positions
         """
-        # Tüm parçaların doğru konumda olup olmadığını kontrol et
+        # Check if all pieces are in correct position
         for piece in self.pieces:
             if not piece.is_in_correct_position():
                 self.is_completed = False
@@ -58,10 +58,10 @@ class GameState:
     @property
     def completion_percentage(self) -> float:
         """
-        Tamamlanma yüzdesini hesaplar
+        Calculate completion percentage
         
         Returns:
-            float: Tamamlanma yüzdesi (0-100)
+            float: Completion percentage (0-100)
         """
         if not self.pieces:
             return 0.0

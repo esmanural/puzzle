@@ -5,7 +5,7 @@ from pygame import Surface
 
 
 class JigsawPiece:
-    """Bir yapboz parçasını temsil eder"""
+    """Represents a single jigsaw puzzle piece"""
     
     def __init__(self, image: Surface, original_position: Tuple[int, int], 
                  piece_id: int):
@@ -13,36 +13,36 @@ class JigsawPiece:
         JigsawPiece constructor
         
         Args:
-            image: Parçanın pygame Surface görüntüsü
-            original_position: Orijinal konum (row, col) - grid'deki doğru konum
-            piece_id: Benzersiz parça kimliği
+            image: Piece image as pygame Surface
+            original_position: Original grid position (row, col)
+            piece_id: Unique piece identifier
         """
         self.image = image
-        self.original_position = original_position  # (row, col) - grid'deki doğru konum
-        self.pixel_position: Optional[Tuple[int, int]] = None  # (x, y) - ekrandaki piksel konumu
+        self.original_position = original_position  
+        self.pixel_position: Optional[Tuple[int, int]] = None  
         self.piece_id = piece_id
-        self.is_dragging = False  # Sürükleniyor mu?
-        self.is_placed = False    # Doğru konuma yerleştirildi mi?
-        self.z_index = 0          # Çizim sırası (sürüklenirken en üstte)
+        self.is_dragging = False  
+        self.is_placed = False    
+        self.z_index = 0          
     
     def is_in_correct_position(self) -> bool:
         """
-        Parçanın doğru konumda olup olmadığını kontrol eder
+        Check whether the piece is placed in its correct position
         
         Returns:
-            bool: Parça doğru konuma yerleştirilmişse True, değilse False
+            bool: True if the piece has been placed, otherwise False
         """
         return self.is_placed
     
     def distance_to_correct_position(self, target_pixel_pos: Tuple[int, int]) -> float:
         """
-        Parçanın doğru konuma olan piksel mesafesini hesaplar
+        Calculate the pixel distance to the correct target position
         
         Args:
-            target_pixel_pos: Hedef piksel pozisyonu (x, y)
+            target_pixel_pos: Target pixel position (x, y)
             
         Returns:
-            float: Mesafe (piksel cinsinden)
+            float: Distance in pixels
         """
         if self.pixel_position is None:
             return float('inf')

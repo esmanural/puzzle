@@ -9,24 +9,24 @@ from jigsaw_puzzle.services.drag_handler import DragHandler
 
 
 class JigsawLogic:
-    """Yapboz oyun mantığını yönetir"""
+    """Manages jigsaw puzzle game logic"""
     
     def __init__(self, game_state: GameState):
         """
         JigsawLogic constructor
         
         Args:
-            game_state: Yönetilecek oyun durumu
+            game_state: Game state to manage
         """
         self.game_state = game_state
         self.drag_handler = DragHandler(game_state)
     
     def scatter_pieces(self, piece_pool_area: pygame.Rect):
         """
-        Parçaları PiecePool alanına rastgele dağıtır
+        Randomly distribute pieces into the PiecePool area
         
         Args:
-            piece_pool_area: Parçaların dağıtılacağı alan
+            piece_pool_area: Area to scatter the pieces into
         """
         for piece in self.game_state.pieces:
             # Rastgele pozisyon hesapla
@@ -42,15 +42,15 @@ class JigsawLogic:
     
     def get_piece_at_position(self, mouse_pos: Tuple[int, int]) -> Optional[JigsawPiece]:
         """
-        Fare pozisyonundaki parçayı bulur (z-index'e göre en üstteki)
+        Find the piece under the mouse position (by highest z-index)
         
         Args:
-            mouse_pos: Fare pozisyonu (x, y)
+            mouse_pos: Mouse position (x, y)
             
         Returns:
-            Optional[JigsawPiece]: Bulunan parça veya None
+            Optional[JigsawPiece]: Found piece or None
         """
-        # Z-index'e göre sırala (en üstteki önce)
+        # Sort by z-index (topmost first)
         sorted_pieces = sorted(
             self.game_state.pieces,
             key=lambda p: p.z_index,
@@ -61,7 +61,7 @@ class JigsawLogic:
             if piece.pixel_position is None:
                 continue
             
-            # Parçanın rect'ini oluştur
+            # Create piece rect
             piece_rect = pygame.Rect(
                 piece.pixel_position[0],
                 piece.pixel_position[1],
@@ -69,7 +69,7 @@ class JigsawLogic:
                 piece.image.get_height()
             )
             
-            # Fare pozisyonu parçanın içinde mi?
+            # Check if mouse position is within the piece
             if piece_rect.collidepoint(mouse_pos):
                 return piece
         
@@ -77,18 +77,18 @@ class JigsawLogic:
     
     def is_puzzle_solved(self) -> bool:
         """
-        Yapboz'un çözülüp çözülmediğini kontrol eder
+        Check whether the puzzle has been solved
         
         Returns:
-            bool: Yapboz tamamlandıysa True, değilse False
+            bool: True if completed, otherwise False
         """
         return self.game_state.check_completion()
     
     def get_completion_percentage(self) -> float:
         """
-        Tamamlanma yüzdesini hesaplar
+        Calculate completion percentage
         
         Returns:
-            float: Tamamlanma yüzdesi (0-100)
+            float: Completion percentage (0-100)
         """
         return self.game_state.completion_percentage

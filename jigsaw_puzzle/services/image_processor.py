@@ -6,87 +6,87 @@ import pygame
 
 
 class ImageProcessor:
-    """Resim yükleme ve parçalara bölme işlemlerini yapar"""
+    """Handles image loading and splitting into pieces"""
     
     @staticmethod
     def load_image(file_path: str, target_area: pygame.Rect, grid_size: Tuple[int, int]) -> Image.Image:
         """
-        Resmi yükler ve grid_size'a göre tam olarak target_area'yı dolduracak şekilde ölçeklendirir.
-        Aspect ratio korunur ve boşluk kalmayacak şekilde maksimum boyutta ölçeklenir.
+        Load image and scale it to perfectly fill target_area based on grid_size.
+        Aspect ratio is preserved and scaled to avoid empty spaces.
         
         Args:
-            file_path: Resim dosyasının yolu
-            target_area: Hedef alan (pygame.Rect)
-            grid_size: Grid boyutu (rows, cols) - parça boyutlarını hesaplamak için
+            file_path: Path to the image file
+            target_area: Target area (pygame.Rect)
+            grid_size: Grid size (rows, cols) used to derive piece sizes
             
         Returns:
-            PIL Image objesi (grid'e tam oturacak şekilde ölçeklenmiş)
+            PIL Image scaled to fit the grid exactly
             
         Raises:
-            FileNotFoundError: Dosya bulunamazsa
-            UnidentifiedImageError: Geçersiz resim formatıysa
+            FileNotFoundError: When the file cannot be found
+            UnidentifiedImageError: When the image format is invalid
         """
         try:
             image = Image.open(file_path)
             
             rows, cols = grid_size
             
-            # Hedef boyutları al
+            # Get target dimensions
             target_width = target_area.width
             target_height = target_area.height
             
-            # Her parçanın boyutunu hesapla
+            # Compute each piece size
             piece_width = target_width // cols
             piece_height = target_height // rows
             
-            # Toplam resim boyutunu parça sayısına göre hesapla
-            # Bu sayede boşluk kalmaz
+            # Compute final image size based on piece count
+            # Ensures no empty space remains
             final_width = piece_width * cols
             final_height = piece_height * rows
             
-            # Aspect ratio'yu koruyarak ölçeklendir
+            # Scale while preserving aspect ratio
             img_ratio = image.width / image.height
             target_ratio = final_width / final_height
             
             if img_ratio > target_ratio:
-                # Resim daha geniş, yüksekliğe göre ölçeklendir ve kırp
+                # Image is wider: scale by height and crop
                 scale = final_height / image.height
                 new_width = int(image.width * scale)
                 new_height = final_height
                 image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 
-                # Ortadan kırp
+                # Center crop
                 left = (new_width - final_width) // 2
                 image = image.crop((left, 0, left + final_width, final_height))
             else:
-                # Resim daha uzun, genişliğe göre ölçeklendir ve kırp
+                # Image is taller: scale by width and crop
                 scale = final_width / image.width
                 new_width = final_width
                 new_height = int(image.height * scale)
                 image = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 
-                # Ortadan kırp
+                # Center crop
                 top = (new_height - final_height) // 2
                 image = image.crop((0, top, final_width, top + final_height))
             
             return image
             
         except FileNotFoundError:
-            raise FileNotFoundError(f"Resim dosyası bulunamadı: {file_path}")
+            raise FileNotFoundError(f"Image file not found: {file_path}")
         except UnidentifiedImageError:
-            raise UnidentifiedImageError(f"Geçersiz resim formatı: {file_path}")
+            raise UnidentifiedImageError(f"Invalid image format: {file_path}")
     
     @staticmethod
     def split_image(image: Image.Image, grid_size: Tuple[int, int]) -> List[Image.Image]:
         """
-        Resmi grid_size'a göre eşit parçalara böler
+        Split the image into equal pieces based on grid_size
         
         Args:
-            image: Bölünecek PIL Image objesi
-            grid_size: Grid boyutu (rows, cols)
+            image: PIL Image to be split
+            grid_size: Grid size (rows, cols)
             
         Returns:
-            PIL Image parçalarının listesi (soldan sağa, yukarıdan aşağıya)
+            List of PIL Image pieces (left-to-right, top-to-bottom)
         """
         rows, cols = grid_size
         width, height = image.size
@@ -98,13 +98,13 @@ class ImageProcessor:
         
         for row in range(rows):
             for col in range(cols):
-                # Her parçanın sol üst köşe koordinatları
+                # Top-left coordinates of each piece
                 left = col * piece_width
                 top = row * piece_height
                 right = left + piece_width
                 bottom = top + piece_height
                 
-                # Parçayı kes
+                # Crop the piece
                 piece = image.crop((left, top, right, bottom))
                 pieces.append(piece)
         
@@ -113,23 +113,23 @@ class ImageProcessor:
     @staticmethod
     def pil_to_pygame(pil_image: Image.Image) -> pygame.Surface:
         """
-        PIL Image'ı pygame Surface'e dönüştürür
+        Convert PIL Image to pygame Surface
         
         Args:
-            pil_image: PIL Image objesi
+            pil_image: PIL Image
             
         Returns:
-            pygame Surface objesi
+            pygame Surface
         """
-        # PIL Image'ı RGB moduna çevir
+        # Convert PIL Image to RGB mode
         if pil_image.mode != 'RGB':
             pil_image = pil_image.convert('RGB')
         
-        # PIL Image'ı string buffer'a çevir
+        # Convert PIL Image to string buffer
         image_string = pil_image.tobytes()
         size = pil_image.size
         
-        # pygame Surface oluştur
+        # Create pygame Surface
         surface = pygame.image.fromstring(image_string, size, 'RGB')
         
         return surface
@@ -137,14 +137,14 @@ class ImageProcessor:
     @staticmethod
     def create_thumbnail(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
         """
-        Önizleme için küçük thumbnail oluşturur
+        Create a small thumbnail for preview
         
         Args:
-            image: PIL Image objesi
-            size: Thumbnail boyutu (width, height)
+            image: PIL Image
+            size: Thumbnail size (width, height)
             
         Returns:
-            Thumbnail PIL Image objesi
+            Thumbnail PIL Image
         """
         thumbnail = image.copy()
         thumbnail.thumbnail(size, Image.Resampling.LANCZOS)

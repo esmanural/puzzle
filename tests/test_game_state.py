@@ -7,27 +7,27 @@ from jigsaw_puzzle.models.jigsaw_piece import JigsawPiece
 
 
 class TestGameState(unittest.TestCase):
-    """GameState sınıfı için unit testler"""
+    """Unit tests for GameState class"""
     
     @classmethod
     def setUpClass(cls):
-        """Pygame'i başlat"""
+        """Initialize pygame"""
         pygame.init()
     
     @classmethod
     def tearDownClass(cls):
-        """Pygame'i kapat"""
+        """Quit pygame"""
         pygame.quit()
     
     def setUp(self):
-        """Her test için yeni bir GameState oluştur"""
-        # Test için basit pygame Surface'ler oluştur
+        """Create a new GameState for each test"""
+        # Create simple pygame Surfaces for testing
         surface1 = pygame.Surface((50, 50))
         surface2 = pygame.Surface((50, 50))
         surface3 = pygame.Surface((50, 50))
         surface4 = pygame.Surface((50, 50))
         
-        # 2x2 grid için 4 parça oluştur
+        # Create 4 pieces for 2x2 grid
         self.pieces = [
             JigsawPiece(surface1, (0, 0), 0),
             JigsawPiece(surface2, (0, 1), 1),
@@ -35,14 +35,14 @@ class TestGameState(unittest.TestCase):
             JigsawPiece(surface4, (1, 1), 3)
         ]
         
-        # Parçaları doğru konuma yerleştir (test için)
+        # Place all pieces correctly (for testing)
         for piece in self.pieces:
             piece.is_placed = True
         
         self.game_state = GameState(grid_size=(2, 2), pieces=self.pieces)
     
     def test_initialization(self):
-        """GameState'in doğru şekilde başlatıldığını test et"""
+        """Test GameState initialization"""
         self.assertEqual(self.game_state.grid_size, (2, 2))
         self.assertEqual(len(self.game_state.pieces), 4)
         self.assertIsNone(self.game_state.selected_piece)
@@ -51,32 +51,32 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(self.game_state.elapsed_time, 0.0)
     
     def test_get_piece_at_existing(self):
-        """Var olan konumdaki parçayı bulmalı"""
-        # get_piece_at sadece yerleştirilmiş parçaları bulur
+        """Finds piece at existing position"""
+        # get_piece_at only finds placed pieces
         piece = self.game_state.get_piece_at((0, 0))
         self.assertIsNotNone(piece)
         self.assertEqual(piece.piece_id, 0)
     
     def test_get_piece_at_nonexisting(self):
-        """Olmayan konumda None döndürmeli"""
+        """Returns None for non-existing position"""
         piece = self.game_state.get_piece_at((5, 5))
         self.assertIsNone(piece)
     
     def test_elapsed_time(self):
-        """Elapsed time özelliğinin çalıştığını test et"""
+        """Test elapsed time property"""
         self.assertEqual(self.game_state.elapsed_time, 0.0)
         self.game_state.elapsed_time = 10.5
         self.assertEqual(self.game_state.elapsed_time, 10.5)
     
     def test_check_completion_all_correct(self):
-        """Tüm parçalar doğru konumdayken True döndürmeli"""
+        """Returns True when all pieces are correct"""
         result = self.game_state.check_completion()
         self.assertTrue(result)
         self.assertTrue(self.game_state.is_completed)
     
     def test_check_completion_not_complete(self):
-        """Parçalar yanlış konumdayken False döndürmeli"""
-        # Bir parçayı yerleştirilmemiş olarak işaretle
+        """Returns False when pieces are incorrect"""
+        # Mark one piece as not placed
         self.pieces[0].is_placed = False
         
         result = self.game_state.check_completion()
@@ -84,13 +84,13 @@ class TestGameState(unittest.TestCase):
         self.assertFalse(self.game_state.is_completed)
     
     def test_completion_percentage_all_placed(self):
-        """Tüm parçalar yerleştirildiğinde %100 döndürmeli"""
+        """Returns 100% when all pieces are placed"""
         percentage = self.game_state.completion_percentage
         self.assertEqual(percentage, 100.0)
     
     def test_completion_percentage_partial(self):
-        """Kısmi yerleştirmede doğru yüzdeyi döndürmeli"""
-        # 2 parçayı yerleştirilmemiş yap
+        """Returns correct percentage for partial placement"""
+        # Mark 2 pieces as not placed
         self.pieces[0].is_placed = False
         self.pieces[1].is_placed = False
         
@@ -98,7 +98,7 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(percentage, 50.0)  # 2/4 = 50%
     
     def test_completion_percentage_none_placed(self):
-        """Hiç parça yerleştirilmediğinde %0 döndürmeli"""
+        """Returns 0% when no pieces are placed"""
         for piece in self.pieces:
             piece.is_placed = False
         

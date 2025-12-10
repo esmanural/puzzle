@@ -8,31 +8,31 @@ from jigsaw_puzzle.services.drag_handler import DragHandler
 
 
 class TestDragHandler(unittest.TestCase):
-    """DragHandler sınıfı için unit testler"""
+    """Unit tests for DragHandler class"""
     
     @classmethod
     def setUpClass(cls):
-        """Pygame'i başlat"""
+        """Initialize pygame"""
         pygame.init()
     
     @classmethod
     def tearDownClass(cls):
-        """Pygame'i kapat"""
+        """Quit pygame"""
         pygame.quit()
     
     def setUp(self):
-        """Her test için yeni bir DragHandler oluştur"""
-        # Test için basit pygame Surface'ler oluştur
+        """Create a new DragHandler for each test"""
+        # Create simple pygame Surfaces for testing
         surface1 = pygame.Surface((50, 50))
         surface2 = pygame.Surface((50, 50))
         
-        # 2 parça oluştur
+        # Create 2 pieces
         self.pieces = [
             JigsawPiece(surface1, (0, 0), 0),
             JigsawPiece(surface2, (0, 1), 1)
         ]
         
-        # Parçalara başlangıç pozisyonları ver
+        # Assign initial positions to pieces
         self.pieces[0].pixel_position = (100, 100)
         self.pieces[1].pixel_position = (200, 200)
         
@@ -40,13 +40,13 @@ class TestDragHandler(unittest.TestCase):
         self.drag_handler = DragHandler(self.game_state, snap_threshold=30)
     
     def test_initialization(self):
-        """DragHandler'ın doğru şekilde başlatıldığını test et"""
+        """Test DragHandler initialization"""
         self.assertEqual(self.drag_handler.snap_threshold, 30)
         self.assertIsNone(self.drag_handler.dragged_piece)
         self.assertEqual(self.drag_handler.drag_offset, (0, 0))
     
     def test_start_drag(self):
-        """Sürükleme başlatma işlemini test et"""
+        """Test starting a drag operation"""
         piece = self.pieces[0]
         mouse_pos = (110, 110)
         
@@ -58,29 +58,29 @@ class TestDragHandler(unittest.TestCase):
         self.assertGreater(piece.z_index, 0)
     
     def test_start_drag_none_piece(self):
-        """None parça ile sürükleme başlatma test et"""
+        """Test starting drag with None piece"""
         self.drag_handler.start_drag(None, (100, 100))
         self.assertIsNone(self.drag_handler.dragged_piece)
     
     def test_update_drag(self):
-        """Sürükleme güncelleme işlemini test et"""
+        """Test updating position during drag"""
         piece = self.pieces[0]
         self.drag_handler.start_drag(piece, (110, 110))
         
-        # Fareyi hareket ettir
+        # Move mouse
         self.drag_handler.update_drag((150, 150))
         
-        # Parçanın pozisyonu güncellenmiş olmalı (offset uygulanmış)
+        # Piece position should be updated (offset applied)
         self.assertEqual(piece.pixel_position, (140, 140))
     
     def test_update_drag_no_dragged_piece(self):
-        """Sürüklenen parça yokken güncelleme test et"""
-        # Hiçbir şey olmamalı
+        """Test update when no piece is dragged"""
+        # Nothing should happen
         self.drag_handler.update_drag((150, 150))
         self.assertIsNone(self.drag_handler.dragged_piece)
     
     def test_end_drag(self):
-        """Sürükleme bitirme işlemini test et"""
+        """Test ending a drag operation"""
         piece = self.pieces[0]
         self.drag_handler.start_drag(piece, (110, 110))
         
@@ -92,15 +92,15 @@ class TestDragHandler(unittest.TestCase):
         self.assertIsInstance(result, bool)
     
     def test_end_drag_no_dragged_piece(self):
-        """Sürüklenen parça yokken bitirme test et"""
+        """Test end drag when no piece is dragged"""
         result = self.drag_handler.end_drag()
         self.assertFalse(result)
     
     def test_check_snap_to_grid_within_threshold(self):
-        """Snap eşiği içinde olan parça için snap test et"""
+        """Test snap when distance is within threshold"""
         piece = self.pieces[0]
         piece.pixel_position = (100, 100)
-        piece.target_pixel_position = (110, 110)  # 14.14 piksel uzakta
+        piece.target_pixel_position = (110, 110)  # ~14.14 pixels away
         
         result = self.drag_handler.check_snap_to_grid(piece)
         
@@ -109,10 +109,10 @@ class TestDragHandler(unittest.TestCase):
         self.assertEqual(piece.pixel_position, (110, 110))
     
     def test_check_snap_to_grid_outside_threshold(self):
-        """Snap eşiği dışında olan parça için snap test et"""
+        """Test snap when distance is outside threshold"""
         piece = self.pieces[0]
         piece.pixel_position = (100, 100)
-        piece.target_pixel_position = (200, 200)  # 141.42 piksel uzakta
+        piece.target_pixel_position = (200, 200)  # ~141.42 pixels away
         
         result = self.drag_handler.check_snap_to_grid(piece)
         
@@ -120,7 +120,7 @@ class TestDragHandler(unittest.TestCase):
         self.assertFalse(piece.is_placed)
     
     def test_check_snap_to_grid_already_placed(self):
-        """Zaten yerleştirilmiş parça için snap test et"""
+        """Test snap for already placed piece"""
         piece = self.pieces[0]
         piece.is_placed = True
         
@@ -129,7 +129,7 @@ class TestDragHandler(unittest.TestCase):
         self.assertFalse(result)
     
     def test_cancel_drag(self):
-        """Sürükleme iptal etme işlemini test et"""
+        """Test canceling a drag operation"""
         piece = self.pieces[0]
         self.drag_handler.start_drag(piece, (110, 110))
         
@@ -140,7 +140,7 @@ class TestDragHandler(unittest.TestCase):
         self.assertEqual(self.drag_handler.drag_offset, (0, 0))
     
     def test_z_index_increment(self):
-        """Z-index'in her sürüklemede arttığını test et"""
+        """Test z-index increases on each drag"""
         piece1 = self.pieces[0]
         piece2 = self.pieces[1]
         
